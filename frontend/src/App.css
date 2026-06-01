@@ -1,0 +1,202 @@
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    background: #0E0E0E;
+
+    color: white;
+
+    font-family:
+
+        Inter,
+
+        sans-serif;
+
+}
+
+.app-shell {
+
+    display: flex;
+
+    min-height: 100vh;
+
+}
+
+/* -------------------------------- */
+/* SIDEBAR */
+/* -------------------------------- */
+
+.sidebar {
+
+    width: 260px;
+
+    background: #111111;
+
+    border-right:
+        1px solid #1E1E1E;
+
+    padding: 2rem;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    height: 100vh;
+
+}
+
+.logo {
+
+    font-size: 2rem;
+
+    color: #86BC25;
+
+    margin-bottom: 0.5rem;
+
+}
+
+.tagline {
+
+    opacity: 0.7;
+
+    line-height: 1.6;
+
+}
+
+/* -------------------------------- */
+/* NAV */
+/* -------------------------------- */
+
+.nav-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+
+    margin-top: 3rem;
+
+}
+
+.nav-item {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 1rem;
+
+    border-radius: 14px;
+
+    transition: 0.3s;
+
+    background: transparent;
+
+}
+
+.nav-item:hover {
+
+    background: #1A1A1A;
+
+}
+
+.nav-item.active {
+
+    background: #86BC25;
+
+    color: black;
+
+    font-weight: 700;
+
+}
+
+/* -------------------------------- */
+/* FOOTER */
+/* -------------------------------- */
+
+.sidebar-footer {
+
+    opacity: 0.5;
+
+    font-size: 0.9rem;
+
+    line-height: 1.6;
+
+}
+
+/* -------------------------------- */
+/* MAIN CONTENT */
+/* -------------------------------- */
+
+.main-content {
+
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
+    padding: 3rem;
+
+}
+
+/* -------------------------------- */
+/* CHATGPT STYLE CONTAINER */
+/* -------------------------------- */
+
+.page-container {
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+}
+
+/* -------------------------------- */
+/* CARD */
+/* -------------------------------- */
+
+.card {
+
+    background: #161616;
+
+    border: 1px solid #232323;
+
+    border-radius: 20px;
+
+    padding: 2rem;
+
+}
+
+/* -------------------------------- */
+/* SCROLLBAR */
+/* -------------------------------- */
+
+::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: #2E2E2E;
+
+    border-radius: 999px;
+
+}

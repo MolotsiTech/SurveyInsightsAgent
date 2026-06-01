@@ -1,0 +1,15 @@
+venv/
+backend/venv/
+node_modules/
+.env
+backend/.env
+__pycache__/
+uploads/
+backend/uploads/
+reports/
+backend/reports/
+dist/
+build/
+backend/storage/
+backend/uploads/
+backend/reports/
