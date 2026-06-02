@@ -135,7 +135,7 @@ export default function AIEngine() {
 
             const response = await axios.post(
 
-                "http://${API_URL}/ai-query",
+                `${API_URL}/ai-query`,
 
                 {
 
@@ -195,7 +195,7 @@ export default function AIEngine() {
 
             const response = await axios.post(
 
-                "http://${API_URL}/generate-report",
+                `${API_URL}/generate-report`,
 
                 {
 
@@ -209,7 +209,7 @@ export default function AIEngine() {
 
             setReportUrl(
 
-                `http://${API_URL}/${data.report_path}`
+                `${API_URL}/${data.report_path}`
 
             );
 
