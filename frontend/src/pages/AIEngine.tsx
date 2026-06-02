@@ -31,17 +31,23 @@ const COLORS = [
 
 export default function AIEngine() {
 
-    const [question, setQuestion] = useState("");
+    const [question, setQuestion] =
+        useState("");
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] =
+        useState(false);
 
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] =
+        useState<any[]>([]);
 
-    const [reportUrl, setReportUrl] = useState("");
+    const [reportUrl, setReportUrl] =
+        useState("");
 
-    const messagesEndRef = useRef<any>(null);
+    const messagesEndRef =
+        useRef<any>(null);
 
-    const datasetId = localStorage.getItem("dataset_id");
+    const datasetId =
+        localStorage.getItem("dataset_id");
 
     // -----------------------------------
     // AUTO SCROLL
@@ -65,36 +71,48 @@ export default function AIEngine() {
 
         if (!datasetId) {
 
-            alert("Please upload a dataset first.");
+            alert(
+                "Please upload a dataset first."
+            );
 
             return;
 
         }
 
         const userMessage = {
+
             type: "user",
+
             text: question
+
         };
 
         setMessages(prev => [
+
             ...prev,
+
             userMessage
+
         ]);
 
         setLoading(true);
 
         try {
 
-            const response = await axios.post(
+            const response =
+                await axios.post(
 
-                `${API_URL}/ai-query`,
+                    `${API_URL}/ai-query`,
 
-                {
-                    dataset_id: datasetId,
-                    question: question
-                }
+                    {
 
-            );
+                        dataset_id: datasetId,
+
+                        question: question
+
+                    }
+
+                );
 
             const aiMessage = {
 
@@ -107,11 +125,15 @@ export default function AIEngine() {
 
                 chart:
                     response.data.chart || null
+
             };
 
             setMessages(prev => [
+
                 ...prev,
+
                 aiMessage
+
             ]);
 
         } catch (error) {
@@ -123,8 +145,12 @@ export default function AIEngine() {
                 ...prev,
 
                 {
+
                     type: "assistant",
-                    text: "An error occurred while contacting the AI service."
+
+                    text:
+                        "An error occurred while contacting the AI service."
+
                 }
 
             ]);
@@ -145,7 +171,9 @@ export default function AIEngine() {
 
         if (!datasetId) {
 
-            alert("Please upload a dataset first.");
+            alert(
+                "Please upload a dataset first."
+            );
 
             return;
 
@@ -155,28 +183,37 @@ export default function AIEngine() {
 
             setLoading(true);
 
-            const response = await axios.post(
+            const response =
+                await axios.post(
 
-                `${API_URL}/generate-report`,
+                    `${API_URL}/generate-report`,
 
-                {
-                    dataset_id: datasetId
-                }
+                    {
 
-            );
+                        dataset_id: datasetId
 
-            const data = response.data;
+                    }
+
+                );
+
+            const data =
+                response.data;
 
             if (data.report_path) {
 
                 setReportUrl(
+
                     `${API_URL}/${data.report_path}`
+
                 );
 
             } else {
 
                 alert(
-                    data.error || "Report generation failed."
+
+                    data.error ||
+                    "Report generation failed."
+
                 );
 
             }
@@ -185,7 +222,9 @@ export default function AIEngine() {
 
             console.log(error);
 
-            alert("Failed to generate report.");
+            alert(
+                "Failed to generate report."
+            );
 
         }
 
@@ -209,19 +248,33 @@ export default function AIEngine() {
 
     return (
 
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div className="page-container">
 
             {/* HEADER */}
 
-            <div className="px-12 pt-12 pb-6 border-b border-[#1f1f1f]">
+            <div
+                style={{
+                    marginBottom: "3rem"
+                }}
+            >
 
-                <h1 className="text-5xl font-bold mb-3">
+                <h1
+                    style={{
+                        fontSize: "4rem",
+                        marginBottom: "1rem"
+                    }}
+                >
 
                     AI Insights Engine
 
                 </h1>
 
-                <p className="text-gray-400 text-lg">
+                <p
+                    style={{
+                        opacity: 0.7,
+                        fontSize: "1.2rem"
+                    }}
+                >
 
                     Conversational organizational intelligence.
 
@@ -231,13 +284,29 @@ export default function AIEngine() {
 
             {/* ACTIONS */}
 
-            <div className="px-12 py-6 flex gap-4 flex-wrap">
+            <div
+                style={{
+                    display: "flex",
+                    gap: "1rem",
+                    marginBottom: "2rem",
+                    flexWrap: "wrap"
+                }}
+            >
 
                 <button
 
                     onClick={generateReport}
 
-                    className="bg-[#86BC25] text-black px-6 py-4 rounded-2xl font-bold"
+                    style={{
+                        background: "#86BC25",
+                        color: "black",
+                        border: "none",
+                        padding: "1rem 2rem",
+                        borderRadius: "14px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        fontSize: "1rem"
+                    }}
 
                 >
 
@@ -255,7 +324,15 @@ export default function AIEngine() {
 
                         rel="noreferrer"
 
-                        className="bg-[#1a1a1a] border border-[#2a2a2a] px-6 py-4 rounded-2xl"
+                        style={{
+                            background: "#161616",
+                            border: "1px solid #333",
+                            color: "white",
+                            padding: "1rem 2rem",
+                            borderRadius: "14px",
+                            textDecoration: "none",
+                            fontWeight: "bold"
+                        }}
 
                     >
 
@@ -269,215 +346,304 @@ export default function AIEngine() {
 
             {/* CHAT AREA */}
 
-            <div className="flex-1 overflow-y-auto px-12 py-6">
+            <div
+                style={{
+                    marginBottom: "2rem"
+                }}
+            >
 
-                <div className="max-w-5xl mx-auto space-y-6">
+                {messages.map((message, index) => (
 
-                    {messages.map((message, index) => (
+                    <div
+
+                        key={index}
+
+                        style={{
+                            display: "flex",
+                            justifyContent:
+                                message.type === "user"
+                                    ? "flex-end"
+                                    : "flex-start",
+                            marginBottom: "1.5rem"
+                        }}
+
+                    >
 
                         <div
 
-                            key={index}
+                            style={{
+                                background:
+                                    message.type === "user"
+                                        ? "#86BC25"
+                                        : "#161616",
 
-                            className={`flex ${
-                                message.type === "user"
-                                    ? "justify-end"
-                                    : "justify-start"
-                            }`}
+                                color:
+                                    message.type === "user"
+                                        ? "black"
+                                        : "white",
+
+                                padding: "1.5rem",
+
+                                borderRadius: "18px",
+
+                                maxWidth: "900px",
+
+                                width: "fit-content",
+
+                                border:
+                                    message.type === "assistant"
+                                        ? "1px solid #2a2a2a"
+                                        : "none"
+                            }}
 
                         >
 
                             <div
-
-                                className={`rounded-3xl p-6 max-w-4xl ${
-                                    message.type === "user"
-                                        ? "bg-[#86BC25] text-black"
-                                        : "bg-[#161616] border border-[#2a2a2a]"
-                                }`}
-
+                                style={{
+                                    whiteSpace: "pre-wrap",
+                                    lineHeight: 1.7,
+                                    fontSize: "1.05rem"
+                                }}
                             >
 
-                                <div className="whitespace-pre-wrap leading-relaxed text-lg">
-
-                                    {message.text}
-
-                                </div>
-
-                                {message.chart && (
-
-                                    <div className="mt-8">
-
-                                        {/* BAR CHART */}
-
-                                        {message.chart.type === "bar" && (
-
-                                            <div className="w-full h-[400px]">
-
-                                                <ResponsiveContainer width="100%" height="100%">
-
-                                                    <BarChart
-
-                                                        data={message.chart.labels.map(
-
-                                                            (label: string, i: number) => ({
-
-                                                                name: label,
-
-                                                                value: message.chart.values[i]
-
-                                                            })
-
-                                                        )}
-
-                                                    >
-
-                                                        <XAxis dataKey="name" />
-
-                                                        <YAxis />
-
-                                                        <Tooltip />
-
-                                                        <Bar
-
-                                                            dataKey="value"
-
-                                                            fill="#86BC25"
-
-                                                        />
-
-                                                    </BarChart>
-
-                                                </ResponsiveContainer>
-
-                                            </div>
-
-                                        )}
-
-                                        {/* PIE CHART */}
-
-                                        {message.chart.type === "pie" && (
-
-                                            <div className="w-full h-[450px]">
-
-                                                <ResponsiveContainer width="100%" height="100%">
-
-                                                    <PieChart>
-
-                                                        <Pie
-
-                                                            data={message.chart.labels.map(
-
-                                                                (label: string, i: number) => ({
-
-                                                                    name: label,
-
-                                                                    value: message.chart.values[i]
-
-                                                                })
-
-                                                            )}
-
-                                                            dataKey="value"
-
-                                                            outerRadius={150}
-
-                                                            label
-
-                                                        >
-
-                                                            {message.chart.values.map(
-
-                                                                (_: any, i: number) => (
-
-                                                                    <Cell
-
-                                                                        key={i}
-
-                                                                        fill={COLORS[i % COLORS.length]}
-
-                                                                    />
-
-                                                                )
-
-                                                            )}
-
-                                                        </Pie>
-
-                                                        <Tooltip />
-
-                                                    </PieChart>
-
-                                                </ResponsiveContainer>
-
-                                            </div>
-
-                                        )}
-
-                                    </div>
-
-                                )}
+                                {message.text}
 
                             </div>
 
+                            {/* BAR CHART */}
+
+                            {
+
+                                message.chart &&
+                                message.chart.type === "bar" && (
+
+                                    <div
+                                        style={{
+                                            width: "700px",
+                                            height: "400px",
+                                            marginTop: "2rem"
+                                        }}
+                                    >
+
+                                        <ResponsiveContainer
+                                            width="100%"
+                                            height="100%"
+                                        >
+
+                                            <BarChart
+
+                                                data={
+                                                    message.chart.labels.map(
+
+                                                        (
+                                                            label: string,
+                                                            i: number
+                                                        ) => ({
+
+                                                            name: label,
+
+                                                            value:
+                                                                message.chart.values[i]
+
+                                                        })
+
+                                                    )
+                                                }
+
+                                            >
+
+                                                <XAxis dataKey="name" />
+
+                                                <YAxis />
+
+                                                <Tooltip />
+
+                                                <Bar
+                                                    dataKey="value"
+                                                    fill="#86BC25"
+                                                />
+
+                                            </BarChart>
+
+                                        </ResponsiveContainer>
+
+                                    </div>
+
+                                )
+
+                            }
+
+                            {/* PIE CHART */}
+
+                            {
+
+                                message.chart &&
+                                message.chart.type === "pie" && (
+
+                                    <div
+                                        style={{
+                                            width: "700px",
+                                            height: "450px",
+                                            marginTop: "2rem"
+                                        }}
+                                    >
+
+                                        <ResponsiveContainer
+                                            width="100%"
+                                            height="100%"
+                                        >
+
+                                            <PieChart>
+
+                                                <Pie
+
+                                                    data={
+                                                        message.chart.labels.map(
+
+                                                            (
+                                                                label: string,
+                                                                i: number
+                                                            ) => ({
+
+                                                                name: label,
+
+                                                                value:
+                                                                    message.chart.values[i]
+
+                                                            })
+
+                                                        )
+                                                    }
+
+                                                    dataKey="value"
+
+                                                    outerRadius={150}
+
+                                                    label
+
+                                                >
+
+                                                    {
+
+                                                        message.chart.values.map(
+
+                                                            (
+                                                                _: any,
+                                                                i: number
+                                                            ) => (
+
+                                                                <Cell
+
+                                                                    key={i}
+
+                                                                    fill={
+                                                                        COLORS[
+                                                                            i %
+                                                                            COLORS.length
+                                                                        ]
+                                                                    }
+
+                                                                />
+
+                                                            )
+
+                                                        )
+
+                                                    }
+
+                                                </Pie>
+
+                                                <Tooltip />
+
+                                            </PieChart>
+
+                                        </ResponsiveContainer>
+
+                                    </div>
+
+                                )
+
+                            }
+
                         </div>
 
-                    ))}
+                    </div>
 
-                    {loading && (
+                ))}
 
-                        <div className="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-5 inline-block">
+                {loading && (
 
-                            AI is thinking...
+                    <div
+                        className="card"
+                    >
 
-                        </div>
+                        AI is thinking...
 
-                    )}
+                    </div>
 
-                    <div ref={messagesEndRef} />
+                )}
 
-                </div>
+                <div ref={messagesEndRef} />
 
             </div>
 
             {/* INPUT */}
 
-            <div className="border-t border-[#1f1f1f] p-6 bg-black">
+            <div
+                style={{
+                    display: "flex",
+                    gap: "1rem",
+                    marginTop: "2rem"
+                }}
+            >
 
-                <div className="max-w-5xl mx-auto flex gap-4">
+                <input
 
-                    <input
+                    type="text"
 
-                        type="text"
+                    value={question}
 
-                        value={question}
+                    onChange={(e) =>
+                        setQuestion(e.target.value)
+                    }
 
-                        onChange={(e) =>
-                            setQuestion(e.target.value)
-                        }
+                    onKeyDown={handleKeyDown}
 
-                        onKeyDown={handleKeyDown}
+                    placeholder="Ask about your data..."
 
-                        placeholder="Ask about your data..."
+                    style={{
+                        flex: 1,
+                        padding: "1rem",
+                        borderRadius: "12px",
+                        border: "1px solid #333",
+                        background: "#111",
+                        color: "white",
+                        fontSize: "1rem"
+                    }}
 
-                        className="flex-1 bg-[#161616] border border-[#2a2a2a] rounded-2xl px-6 py-4 text-lg outline-none"
+                />
 
-                    />
+                <button
 
-                    <button
+                    onClick={askAI}
 
-                        onClick={askAI}
+                    disabled={loading}
 
-                        disabled={loading}
+                    style={{
+                        background: "#86BC25",
+                        color: "black",
+                        border: "none",
+                        padding: "1rem 2rem",
+                        borderRadius: "12px",
+                        fontWeight: "bold",
+                        cursor: "pointer"
+                    }}
 
-                        className="bg-[#86BC25] text-black px-8 py-4 rounded-2xl font-bold"
+                >
 
-                    >
+                    Send
 
-                        Send
-
-                    </button>
-
-                </div>
+                </button>
 
             </div>
 
