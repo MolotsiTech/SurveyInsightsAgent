@@ -50,11 +50,8 @@ function Analytics() {
                 `${API_URL}/analytics/${datasetId}`
             );
 
-            const response =
-                await fetch(
-
+            const response = await fetch(
                     `${API_URL}/analytics/${datasetId}`
-
                 );
 
             console.log(
@@ -324,4 +321,3 @@ function Analytics() {
 }
 
 export default Analytics;
-```
