@@ -1,16 +1,11 @@
 import { API_URL } from "../api";
 import {
-
     useEffect,
-
     useState
-
 } from "react";
 
 import {
-
     useDataset
-
 } from "../context/DatasetContext";
 
 function Analytics() {
@@ -19,12 +14,19 @@ function Analytics() {
         useDataset();
 
     const [
-
         analytics,
-
         setAnalytics
-
     ] = useState<any>(null);
+
+    const [
+        loading,
+        setLoading
+    ] = useState(true);
+
+    const [
+        error,
+        setError
+    ] = useState<string | null>(null);
 
     useEffect(() => {
 
@@ -39,21 +41,68 @@ function Analytics() {
 
         try {
 
+            setLoading(true);
+
+            setError(null);
+
+            console.log(
+                "Fetching analytics from:",
+                `${API_URL}/analytics/${datasetId}`
+            );
+
             const response =
                 await fetch(
 
-                    `http://${API_URL}/analytics/${datasetId}`
+                    `${API_URL}/analytics/${datasetId}`
 
                 );
 
+            console.log(
+                "Analytics response status:",
+                response.status
+            );
+
+            const text =
+                await response.text();
+
+            console.log(
+                "Raw analytics response:",
+                text
+            );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Server Error: ${response.status}`
+                );
+
+            }
+
             const data =
-                await response.json();
+                JSON.parse(text);
+
+            console.log(
+                "Parsed analytics data:",
+                data
+            );
 
             setAnalytics(data);
 
-        } catch (error) {
+        } catch (error: any) {
 
-            console.error(error);
+            console.error(
+                "Analytics fetch failed:",
+                error
+            );
+
+            setError(
+                error.message ||
+                "Failed to load analytics."
+            );
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -66,10 +115,44 @@ function Analytics() {
             <div className="page-container">
 
                 <h2>
-
                     Upload a dataset first.
-
                 </h2>
+
+            </div>
+
+        );
+
+    }
+
+    if (loading) {
+
+        return (
+
+            <div className="page-container">
+
+                <h2>
+                    Loading analytics...
+                </h2>
+
+            </div>
+
+        );
+
+    }
+
+    if (error) {
+
+        return (
+
+            <div className="page-container">
+
+                <h2>
+                    Analytics Error
+                </h2>
+
+                <p>
+                    {error}
+                </p>
 
             </div>
 
@@ -84,7 +167,7 @@ function Analytics() {
             <div className="page-container">
 
                 <h2>
-                    Loading analytics...
+                    No analytics data found.
                 </h2>
 
             </div>
@@ -241,3 +324,4 @@ function Analytics() {
 }
 
 export default Analytics;
+```
