@@ -1,3 +1,4 @@
+import { API_URL } from "../api";
 import {
 
     useState
@@ -65,7 +66,7 @@ function Overview() {
             const response =
                 await fetch(
 
-                    "http://127.0.0.1:8000/upload",
+                    `${API_URL}/upload`,
 
                     {
 

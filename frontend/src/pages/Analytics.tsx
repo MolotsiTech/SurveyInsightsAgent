@@ -1,3 +1,4 @@
+import { API_URL } from "../api";
 import {
 
     useEffect,
@@ -41,7 +42,7 @@ function Analytics() {
             const response =
                 await fetch(
 
-                    `http://127.0.0.1:8000/analytics/${datasetId}`
+                    `http://${API_URL}/analytics/${datasetId}`
 
                 );
 

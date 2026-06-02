@@ -1,3 +1,4 @@
+import { API_URL } from "../api";
 import {
 
     useState,
@@ -134,7 +135,7 @@ export default function AIEngine() {
 
             const response = await axios.post(
 
-                "http://127.0.0.1:8000/ai-query",
+                "http://${API_URL}/ai-query",
 
                 {
 
@@ -194,7 +195,7 @@ export default function AIEngine() {
 
             const response = await axios.post(
 
-                "http://127.0.0.1:8000/generate-report",
+                "http://${API_URL}/generate-report",
 
                 {
 
@@ -208,7 +209,7 @@ export default function AIEngine() {
 
             setReportUrl(
 
-                `http://127.0.0.1:8000/${data.report_path}`
+                `http://${API_URL}/${data.report_path}`
 
             );
 

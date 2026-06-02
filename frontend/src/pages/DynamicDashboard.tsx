@@ -1,3 +1,4 @@
+import { API_URL } from "../api";
 import {
 
     useEffect,
@@ -74,7 +75,7 @@ export default function DynamicDashboard() {
 
             const response = await axios.get(
 
-                `http://127.0.0.1:8000/dashboard/${datasetId}`
+                `${API_URL}/dashboard/${datasetId}`
 
             );
 
@@ -362,7 +363,7 @@ export default function DynamicDashboard() {
 
                                                     word: string,
 
-                                                    index: number
+                                                    _index: number
 
                                                 ) => ({
 
