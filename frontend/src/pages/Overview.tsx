@@ -1,272 +1,121 @@
 import { API_URL } from "../api";
-import {
 
-    useState
+import { useState } from "react";
 
-} from "react";
+import axios from "axios";
 
-import {
+export default function Overview() {
 
-    useDataset
-
-} from "../context/DatasetContext";
-
-function Overview() {
-
-    const {
-
-        datasetId,
-
-        setDatasetId
-
-    } = useDataset();
-
-    const [
-
-        loading,
-
-        setLoading
-
-    ] = useState(false);
-
-    const [
-
-        analytics,
-
-        setAnalytics
-
-    ] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const uploadFile = async (
 
-        event: any
+        e: any
 
     ) => {
 
-        const file =
-            event.target.files[0];
+        const file = e.target.files[0];
 
         if (!file) return;
 
-        const formData =
-            new FormData();
+        const formData = new FormData();
 
-        formData.append(
-
-            "file",
-
-            file
-
-        );
+        formData.append("file", file);
 
         try {
 
             setLoading(true);
 
-            const response =
-                await fetch(
+            const response = await axios.post(
 
-                    `${API_URL}/upload`,
+                `${API_URL}/upload`,
 
-                    {
+                formData,
 
-                        method: "POST",
-
-                        body: formData
-
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
                     }
+                }
 
-                );
-
-            const data =
-                await response.json();
-
-            setDatasetId(
-                data.dataset_id
             );
 
-            setAnalytics(
-                data.analytics
+            localStorage.setItem(
+
+                "dataset_id",
+
+                response.data.dataset_id
+
             );
+
+            alert("Dataset uploaded successfully.");
 
         } catch (error) {
 
-            console.error(error);
+            console.log(error);
 
-        } finally {
-
-            setLoading(false);
+            alert("Upload failed.");
 
         }
+
+        setLoading(false);
 
     };
 
     return (
 
-        <div className="page-container">
+        <div className="min-h-screen bg-black text-white px-12 py-12">
 
-            <div
-                style={{
-                    marginBottom: "3rem"
-                }}
-            >
+            <div className="max-w-5xl">
 
-                <h1
-                    style={{
-                        fontSize: "3.5rem",
-                        marginBottom: "1rem"
-                    }}
-                >
+                <h1 className="text-7xl font-bold leading-tight mb-6">
 
-                    Organizational
-                    Intelligence Platform
+                    Organizational Intelligence Platform
 
                 </h1>
 
-                <p
-                    style={{
-                        opacity: 0.7,
-                        lineHeight: 1.8,
-                        maxWidth: 700
-                    }}
-                >
+                <p className="text-2xl text-gray-400 leading-relaxed mb-16">
 
-                    Upload organizational
-                    survey data and generate
-                    AI-powered analytics,
-                    insights, qualitative
-                    themes and executive
-                    intelligence.
+                    Upload organizational survey data and generate
+                    AI-powered analytics, qualitative themes
+                    and executive intelligence.
 
                 </p>
 
-            </div>
+                <div className="bg-[#111111] border border-[#1f1f1f] rounded-3xl p-10 max-w-2xl">
 
-            <div className="card">
+                    <h2 className="text-4xl font-bold text-[#86BC25] mb-8">
 
-                <h2
-                    style={{
-                        marginBottom: "1.5rem",
-                        color: "#86BC25"
-                    }}
-                >
+                        Upload Dataset
 
-                    Upload Dataset
+                    </h2>
 
-                </h2>
+                    <input
 
-                <input
+                        type="file"
 
-                    type="file"
+                        onChange={uploadFile}
 
-                    onChange={uploadFile}
+                        className="text-lg"
 
-                    style={{
-                        marginBottom: "1.5rem"
-                    }}
+                    />
 
-                />
+                    {loading && (
 
-                {
+                        <p className="mt-6 text-gray-400">
 
-                    loading && (
+                            Uploading dataset...
 
-                        <p>
-                            Uploading and
-                            analyzing dataset...
                         </p>
 
-                    )
+                    )}
 
-                }
-
-                {
-
-                    datasetId && (
-
-                        <div
-                            style={{
-                                marginTop: "2rem"
-                            }}
-                        >
-
-                            <h3
-                                style={{
-                                    marginBottom: "1rem"
-                                }}
-                            >
-
-                                Dataset Uploaded
-
-                            </h3>
-
-                            <p>
-
-                                <strong>
-                                    Dataset ID:
-                                </strong>
-
-                                {" "}
-
-                                {datasetId}
-
-                            </p>
-
-                            {
-
-                                analytics && (
-
-                                    <div
-                                        style={{
-                                            marginTop: "1.5rem"
-                                        }}
-                                    >
-
-                                        <p>
-
-                                            <strong>
-                                                Responses:
-                                            </strong>
-
-                                            {" "}
-
-                                            {
-                                                analytics.total_rows
-                                            }
-
-                                        </p>
-
-                                        <p>
-
-                                            <strong>
-                                                Fields:
-                                            </strong>
-
-                                            {" "}
-
-                                            {
-                                                analytics.total_columns
-                                            }
-
-                                        </p>
-
-                                    </div>
-
-                                )
-
-                            }
-
-                        </div>
-
-                    )
-
-                }
+                </div>
 
             </div>
 
         </div>
 
     );
-}
 
-export default Overview;
+}

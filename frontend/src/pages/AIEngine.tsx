@@ -1,95 +1,47 @@
 import { API_URL } from "../api";
+
 import {
-
     useState,
-
     useRef,
-
     useEffect
-
 } from "react";
 
 import axios from "axios";
 
 import {
-
     BarChart,
-
     Bar,
-
     XAxis,
-
     YAxis,
-
     Tooltip,
-
     ResponsiveContainer,
-
     PieChart,
-
     Pie,
-
     Cell
-
 } from "recharts";
 
-import WordCloud from "react-d3-cloud";
-
 const COLORS = [
-
     "#86BC25",
-
     "#5bc0eb",
-
     "#f25f5c",
-
     "#ffe066",
-
     "#9b5de5",
-
     "#00bbf9"
-
 ];
 
 export default function AIEngine() {
 
-    const [
+    const [question, setQuestion] = useState("");
 
-        question,
+    const [loading, setLoading] = useState(false);
 
-        setQuestion
+    const [messages, setMessages] = useState<any[]>([]);
 
-    ] = useState("");
-
-    const [
-
-        loading,
-
-        setLoading
-
-    ] = useState(false);
-
-    const [
-
-        messages,
-
-        setMessages
-
-    ] = useState<any[]>([]);
-
-    const [
-
-        reportUrl,
-
-        setReportUrl
-
-    ] = useState("");
+    const [reportUrl, setReportUrl] = useState("");
 
     const messagesEndRef = useRef<any>(null);
 
-    const datasetId = localStorage.getItem(
-        "dataset_id"
-    );
+    const datasetId = localStorage.getItem("dataset_id");
 
     // -----------------------------------
     // AUTO SCROLL
@@ -98,9 +50,7 @@ export default function AIEngine() {
     useEffect(() => {
 
         messagesEndRef.current?.scrollIntoView({
-
             behavior: "smooth"
-
         });
 
     }, [messages]);
@@ -113,20 +63,22 @@ export default function AIEngine() {
 
         if (!question.trim()) return;
 
+        if (!datasetId) {
+
+            alert("Please upload a dataset first.");
+
+            return;
+
+        }
+
         const userMessage = {
-
             type: "user",
-
             text: question
-
         };
 
         setMessages(prev => [
-
             ...prev,
-
             userMessage
-
         ]);
 
         setLoading(true);
@@ -138,11 +90,8 @@ export default function AIEngine() {
                 `${API_URL}/ai-query`,
 
                 {
-
                     dataset_id: datasetId,
-
                     question: question
-
                 }
 
             );
@@ -152,28 +101,33 @@ export default function AIEngine() {
                 type: "assistant",
 
                 text:
-
                     response.data.summary ||
-
+                    response.data.error ||
                     "No response.",
 
                 chart:
-
-                    response.data.chart
-
+                    response.data.chart || null
             };
 
             setMessages(prev => [
-
                 ...prev,
-
                 aiMessage
-
             ]);
 
         } catch (error) {
 
             console.log(error);
+
+            setMessages(prev => [
+
+                ...prev,
+
+                {
+                    type: "assistant",
+                    text: "An error occurred while contacting the AI service."
+                }
+
+            ]);
 
         }
 
@@ -189,6 +143,14 @@ export default function AIEngine() {
 
     const generateReport = async () => {
 
+        if (!datasetId) {
+
+            alert("Please upload a dataset first.");
+
+            return;
+
+        }
+
         try {
 
             setLoading(true);
@@ -198,24 +160,32 @@ export default function AIEngine() {
                 `${API_URL}/generate-report`,
 
                 {
-
                     dataset_id: datasetId
-
                 }
 
             );
 
             const data = response.data;
 
-            setReportUrl(
+            if (data.report_path) {
 
-                `${API_URL}/${data.report_path}`
+                setReportUrl(
+                    `${API_URL}/${data.report_path}`
+                );
 
-            );
+            } else {
+
+                alert(
+                    data.error || "Report generation failed."
+                );
+
+            }
 
         } catch (error) {
 
             console.log(error);
+
+            alert("Failed to generate report.");
 
         }
 
@@ -227,11 +197,7 @@ export default function AIEngine() {
     // ENTER KEY
     // -----------------------------------
 
-    const handleKeyDown = (
-
-        e: any
-
-    ) => {
+    const handleKeyDown = (e: any) => {
 
         if (e.key === "Enter") {
 
@@ -243,21 +209,19 @@ export default function AIEngine() {
 
     return (
 
-        <div className="bg-black min-h-screen text-white flex flex-col">
+        <div className="min-h-screen bg-black text-white flex flex-col">
 
-            {/* ----------------------------------- */}
             {/* HEADER */}
-            {/* ----------------------------------- */}
 
-            <div className="p-10 border-b border-[#1f1f1f]">
+            <div className="px-12 pt-12 pb-6 border-b border-[#1f1f1f]">
 
-                <h1 className="text-6xl font-bold mb-4">
+                <h1 className="text-5xl font-bold mb-3">
 
                     AI Insights Engine
 
                 </h1>
 
-                <p className="text-gray-400 text-xl">
+                <p className="text-gray-400 text-lg">
 
                     Conversational organizational intelligence.
 
@@ -265,17 +229,15 @@ export default function AIEngine() {
 
             </div>
 
-            {/* ----------------------------------- */}
             {/* ACTIONS */}
-            {/* ----------------------------------- */}
 
-            <div className="px-10 pt-8 flex gap-4">
+            <div className="px-12 py-6 flex gap-4 flex-wrap">
 
                 <button
 
                     onClick={generateReport}
 
-                    className="bg-[#86BC25] text-black px-8 py-4 rounded-3xl font-bold text-lg"
+                    className="bg-[#86BC25] text-black px-6 py-4 rounded-2xl font-bold"
 
                 >
 
@@ -293,7 +255,7 @@ export default function AIEngine() {
 
                         rel="noreferrer"
 
-                        className="bg-[#1a1a1a] border border-[#2a2a2a] px-8 py-4 rounded-3xl text-lg"
+                        className="bg-[#1a1a1a] border border-[#2a2a2a] px-6 py-4 rounded-2xl"
 
                     >
 
@@ -305,103 +267,63 @@ export default function AIEngine() {
 
             </div>
 
-            {/* ----------------------------------- */}
             {/* CHAT AREA */}
-            {/* ----------------------------------- */}
 
-            <div className="flex-1 overflow-y-auto px-10 py-8 space-y-8">
+            <div className="flex-1 overflow-y-auto px-12 py-6">
 
-                {messages.map(
+                <div className="max-w-5xl mx-auto space-y-6">
 
-                    (
-
-                        message,
-
-                        index
-
-                    ) => (
+                    {messages.map((message, index) => (
 
                         <div
 
                             key={index}
 
                             className={`flex ${
-
                                 message.type === "user"
-
                                     ? "justify-end"
-
                                     : "justify-start"
-
                             }`}
 
                         >
 
                             <div
 
-                                className={`max-w-4xl rounded-3xl p-8 ${
-
+                                className={`rounded-3xl p-6 max-w-4xl ${
                                     message.type === "user"
-
                                         ? "bg-[#86BC25] text-black"
-
                                         : "bg-[#161616] border border-[#2a2a2a]"
-
                                 }`}
 
                             >
 
-                                {/* ----------------------------------- */}
-                                {/* TEXT */}
-                                {/* ----------------------------------- */}
-
-                                <div className="text-lg leading-relaxed whitespace-pre-wrap">
+                                <div className="whitespace-pre-wrap leading-relaxed text-lg">
 
                                     {message.text}
 
                                 </div>
 
-                                {/* ----------------------------------- */}
-                                {/* CHARTS */}
-                                {/* ----------------------------------- */}
-
                                 {message.chart && (
 
                                     <div className="mt-8">
 
-                                        {/* ----------------------------------- */}
                                         {/* BAR CHART */}
-                                        {/* ----------------------------------- */}
 
                                         {message.chart.type === "bar" && (
 
                                             <div className="w-full h-[400px]">
 
-                                                <ResponsiveContainer
-
-                                                    width="100%"
-
-                                                    height="100%"
-
-                                                >
+                                                <ResponsiveContainer width="100%" height="100%">
 
                                                     <BarChart
 
                                                         data={message.chart.labels.map(
 
-                                                            (
-
-                                                                label: string,
-
-                                                                i: number
-
-                                                            ) => ({
+                                                            (label: string, i: number) => ({
 
                                                                 name: label,
 
-                                                                value:
-
-                                                                    message.chart.values[i]
+                                                                value: message.chart.values[i]
 
                                                             })
 
@@ -431,21 +353,13 @@ export default function AIEngine() {
 
                                         )}
 
-                                        {/* ----------------------------------- */}
                                         {/* PIE CHART */}
-                                        {/* ----------------------------------- */}
 
                                         {message.chart.type === "pie" && (
 
                                             <div className="w-full h-[450px]">
 
-                                                <ResponsiveContainer
-
-                                                    width="100%"
-
-                                                    height="100%"
-
-                                                >
+                                                <ResponsiveContainer width="100%" height="100%">
 
                                                     <PieChart>
 
@@ -453,19 +367,11 @@ export default function AIEngine() {
 
                                                             data={message.chart.labels.map(
 
-                                                                (
-
-                                                                    label: string,
-
-                                                                    i: number
-
-                                                                ) => ({
+                                                                (label: string, i: number) => ({
 
                                                                     name: label,
 
-                                                                    value:
-
-                                                                        message.chart.values[i]
+                                                                    value: message.chart.values[i]
 
                                                                 })
 
@@ -481,29 +387,13 @@ export default function AIEngine() {
 
                                                             {message.chart.values.map(
 
-                                                                (
-
-                                                                    _: any,
-
-                                                                    i: number
-
-                                                                ) => (
+                                                                (_: any, i: number) => (
 
                                                                     <Cell
 
                                                                         key={i}
 
-                                                                        fill={
-
-                                                                            COLORS[
-
-                                                                                i %
-
-                                                                                COLORS.length
-
-                                                                            ]
-
-                                                                        }
+                                                                        fill={COLORS[i % COLORS.length]}
 
                                                                     />
 
@@ -523,144 +413,6 @@ export default function AIEngine() {
 
                                         )}
 
-                                        {/* ----------------------------------- */}
-                                        {/* WORD CLOUD */}
-                                        {/* ----------------------------------- */}
-
-                                        {message.chart.type === "wordcloud" && (
-
-                                            <div className="w-full overflow-hidden bg-[#0f0f0f] rounded-3xl p-6 mt-6">
-
-                                                <WordCloud
-
-                                                    data={Object.entries(
-
-                                                        message.chart.text
-
-                                                            .toLowerCase()
-
-                                                            .replace(/[^\w\s]/g, "")
-
-                                                            .split(/\s+/)
-
-                                                            .filter(
-
-                                                                (
-
-                                                                    word: string
-
-                                                                ) =>
-
-                                                                    word.length > 4
-
-                                                            )
-
-                                                            .reduce(
-
-                                                                (
-
-                                                                    acc: any,
-
-                                                                    word: string
-
-                                                                ) => {
-
-                                                                    acc[word] = (
-
-                                                                        acc[word] || 0
-
-                                                                    ) + 1;
-
-                                                                    return acc;
-
-                                                                },
-
-                                                                {}
-
-                                                            )
-
-                                                    )
-
-                                                    .sort(
-
-                                                        (
-
-                                                            a: any,
-
-                                                            b: any
-
-                                                        ) =>
-
-                                                            b[1] - a[1]
-
-                                                    )
-
-                                                    .slice(0, 40)
-
-                                                    .map(
-
-                                                        ([
-
-                                                            text,
-
-                                                            value
-
-                                                        ]: any) => ({
-
-                                                            text,
-
-                                                            value: Math.min(
-
-                                                                value * 12,
-
-                                                                70
-
-                                                            )
-
-                                                        })
-
-                                                    )}
-
-                                                    width={700}
-
-                                                    height={300}
-
-                                                    font="Arial"
-
-                                                    fontStyle="normal"
-
-                                                    fontWeight="bold"
-
-                                                    padding={2}
-
-                                                    spiral="archimedean"
-
-                                                    rotate={() => 0}
-
-                                                    fontSize={(word: any) =>
-
-                                                        Math.max(
-
-                                                            16,
-
-                                                            Math.min(
-
-                                                                word.value,
-
-                                                                60
-
-                                                            )
-
-                                                        )
-
-                                                    }
-
-                                                />
-
-                                            </div>
-
-                                        )}
-
                                     </div>
 
                                 )}
@@ -669,39 +421,29 @@ export default function AIEngine() {
 
                         </div>
 
-                    )
+                    ))}
 
-                )}
+                    {loading && (
 
-                {/* ----------------------------------- */}
-                {/* LOADING */}
-                {/* ----------------------------------- */}
-
-                {loading && (
-
-                    <div className="flex justify-start">
-
-                        <div className="bg-[#161616] border border-[#2a2a2a] rounded-3xl p-6">
+                        <div className="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-5 inline-block">
 
                             AI is thinking...
 
                         </div>
 
-                    </div>
+                    )}
 
-                )}
+                    <div ref={messagesEndRef} />
 
-                <div ref={messagesEndRef} />
+                </div>
 
             </div>
 
-            {/* ----------------------------------- */}
             {/* INPUT */}
-            {/* ----------------------------------- */}
 
-            <div className="border-t border-[#1f1f1f] p-6 bg-black sticky bottom-0">
+            <div className="border-t border-[#1f1f1f] p-6 bg-black">
 
-                <div className="max-w-6xl mx-auto flex gap-4">
+                <div className="max-w-5xl mx-auto flex gap-4">
 
                     <input
 
@@ -710,20 +452,14 @@ export default function AIEngine() {
                         value={question}
 
                         onChange={(e) =>
-
-                            setQuestion(
-
-                                e.target.value
-
-                            )
-
+                            setQuestion(e.target.value)
                         }
 
                         onKeyDown={handleKeyDown}
 
                         placeholder="Ask about your data..."
 
-                        className="flex-1 bg-[#161616] border border-[#2a2a2a] rounded-3xl px-8 py-6 text-xl outline-none"
+                        className="flex-1 bg-[#161616] border border-[#2a2a2a] rounded-2xl px-6 py-4 text-lg outline-none"
 
                     />
 
@@ -733,7 +469,7 @@ export default function AIEngine() {
 
                         disabled={loading}
 
-                        className="bg-[#86BC25] text-black px-10 py-6 rounded-3xl font-bold text-xl"
+                        className="bg-[#86BC25] text-black px-8 py-4 rounded-2xl font-bold"
 
                     >
 
