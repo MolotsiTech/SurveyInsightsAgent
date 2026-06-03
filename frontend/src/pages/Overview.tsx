@@ -73,43 +73,42 @@ export default function Overview() {
                 {/* HERO SECTION */}
 
                 <div
-                    style={{
-                        marginBottom: "4rem"
-                    }}
-                >
+    style={{
+        marginBottom: "3rem",
+        maxWidth: "900px"
+    }}
+>
 
-                    <h1
-                        style={{
-                            fontSize: "4.5rem",
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            letterSpacing: "-2px",
-                            marginBottom: "1.5rem"
-                        }}
-                    >
+    <h1
+        style={{
+            fontSize: "3.2rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-1px",
+            marginBottom: "1rem"
+        }}
+    >
 
-                        Organizational
-                        <br />
-                        Intelligence
+        Organizational Intelligence
 
-                    </h1>
+    </h1>
 
-                    <p
-                        style={{
-                            fontSize: "1.2rem",
-                            color: "#9ca3af",
-                            maxWidth: "850px",
-                            lineHeight: 1.8
-                        }}
-                    >
+    <p
+        style={{
+            fontSize: "1.05rem",
+            color: "#9ca3af",
+            maxWidth: "700px",
+            lineHeight: 1.7
+        }}
+    >
 
-                        Upload organizational survey data and generate
-                        AI-powered analytics, insights, qualitative themes
-                        and executive intelligence.
+        Upload organizational survey data and generate
+        AI-powered analytics, insights, qualitative themes
+        and executive intelligence.
 
-                    </p>
+    </p>
 
-                </div>
+</div>
 
                 {/* UPLOAD CARD */}
 
