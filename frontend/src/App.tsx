@@ -1,35 +1,22 @@
 import {
-
     BrowserRouter,
-
     Routes,
-
     Route,
-
     NavLink
-
 } from "react-router-dom";
 
+import {
+    LayoutDashboard,
+    BarChart3,
+    Bot
+} from "lucide-react";
+
 import Overview from "./pages/Overview";
-
 import Analytics from "./pages/Analytics";
-
 import AIEngine from "./pages/AIEngine";
 
-import DynamicDashboard from "./pages/DynamicDashboard";
-
-<Route
-
-    path="/dynamic-dashboard"
-
-    element={<DynamicDashboard />}
-
-/>
-
 import {
-
     DatasetProvider
-
 } from "./context/DatasetContext";
 
 import "./App.css";
@@ -51,88 +38,94 @@ function App() {
                         <div>
 
                             <h1 className="logo">
-
                                 SurveyAI
-
                             </h1>
 
                             <p className="tagline">
-
-                                Organizational
-                                Intelligence
-
+                                Organizational Intelligence
                             </p>
+
+                            <nav className="nav-links">
+
+                                <NavLink
+                                    to="/"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "nav-item active"
+                                            : "nav-item"
+                                    }
+                                >
+                                    <LayoutDashboard size={20} />
+
+                                    <span>
+                                        Overview
+                                    </span>
+
+                                </NavLink>
+
+                                <NavLink
+                                    to="/analytics"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "nav-item active"
+                                            : "nav-item"
+                                    }
+                                >
+                                    <BarChart3 size={20} />
+
+                                    <span>
+                                        Analytics
+                                    </span>
+
+                                </NavLink>
+
+                                <NavLink
+                                    to="/ai"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "nav-item active"
+                                            : "nav-item"
+                                    }
+                                >
+                                    <Bot size={20} />
+
+                                    <span>
+                                        AI Engine
+                                    </span>
+
+                                </NavLink>
+
+                            </nav>
 
                         </div>
 
-                        <nav className="nav-links">
-
-                            <NavLink
-                                to="/"
-                                className="nav-item"
-                            >
-
-                                Overview
-
-                            </NavLink>
-
-                            <NavLink
-                                to="/analytics"
-                                className="nav-item"
-                            >
-
-                                Analytics
-
-                            </NavLink>
-
-                            <NavLink
-                                to="/ai"
-                                className="nav-item"
-                            >
-
-                                AI Engine
-
-                            </NavLink>
-
-                        </nav>
-
                         <div className="sidebar-footer">
 
-                            Deloitte-inspired
-                            AI analytics platform
+                            Deloitte-inspired AI analytics platform
 
                         </div>
 
                     </aside>
 
-                    {/* MAIN */}
+                    {/* MAIN CONTENT */}
 
                     <main className="main-content">
 
                         <Routes>
 
                             <Route
-
                                 path="/"
-
                                 element={<Overview />}
-
                             />
 
                             <Route
-
                                 path="/analytics"
-
                                 element={<Analytics />}
-
                             />
 
                             <Route
-
                                 path="/ai"
-
                                 element={<AIEngine />}
-
                             />
 
                         </Routes>
