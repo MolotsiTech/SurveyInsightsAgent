@@ -38,7 +38,7 @@ function App() {
                         <div>
 
                             <h1 className="logo">
-                                SurveyAI
+                                DataGenie<span style={{ color: "white" }}>AI</span>
                             </h1>
 
                             <p className="tagline">
