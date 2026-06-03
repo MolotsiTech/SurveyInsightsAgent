@@ -200,3 +200,42 @@ body {
     border-radius: 999px;
 
 }
+
+.sidebar {
+    width: 88px;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.sidebar:hover {
+    width: 260px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.nav-item span {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.sidebar:hover .nav-item span {
+    opacity: 1;
+}
+
+.logo,
+.tagline,
+.sidebar-footer {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .logo,
+.sidebar:hover .tagline,
+.sidebar:hover .sidebar-footer {
+    opacity: 1;
+}
