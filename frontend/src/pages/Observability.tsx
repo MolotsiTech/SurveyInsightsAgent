@@ -41,7 +41,7 @@ export default function Observability() {
         fetchLogs();
 
         const interval =
-            setInterval(fetchLogs, 2000);
+            setInterval(fetchLogs, 10000);
 
         return () =>
             clearInterval(interval);
