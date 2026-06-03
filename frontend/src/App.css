@@ -44,10 +44,19 @@ body {
 
 .logo {
     color: #86BC25;
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
     white-space: nowrap;
+
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* SHOW LOGO ONLY ON HOVER */
+
+.sidebar:hover .logo {
+    opacity: 1;
 }
 
 .tagline {
