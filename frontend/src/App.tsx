@@ -1,3 +1,6 @@
+
+import Observability from "./pages/Observability";
+
 import {
     BrowserRouter,
     Routes,
@@ -8,7 +11,8 @@ import {
 import {
     LayoutDashboard,
     BarChart3,
-    Bot
+    Bot,
+    Activity
 } from "lucide-react";
 
 import Overview from "./pages/Overview";
@@ -38,7 +42,10 @@ function App() {
                         <div>
 
                             <h1 className="logo">
-                                DataGenie<span style={{ color: "white" }}>AI</span>
+                                DataGenie
+                                <span style={{ color: "white" }}>
+                                    AI
+                                </span>
                             </h1>
 
                             <p className="tagline">
@@ -95,6 +102,22 @@ function App() {
 
                                 </NavLink>
 
+                                <NavLink
+                                    to="/observability"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "nav-item active"
+                                            : "nav-item"
+                                    }
+                                >
+                                    <Activity size={20} />
+
+                                    <span>
+                                        Observability
+                                    </span>
+
+                                </NavLink>
+
                             </nav>
 
                         </div>
@@ -126,6 +149,11 @@ function App() {
                             <Route
                                 path="/ai"
                                 element={<AIEngine />}
+                            />
+
+                            <Route
+                                path="/observability"
+                                element={<Observability />}
                             />
 
                         </Routes>
