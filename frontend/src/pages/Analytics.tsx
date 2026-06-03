@@ -1,17 +1,14 @@
 import { API_URL } from "../api";
+
 import {
     useEffect,
     useState
 } from "react";
 
-import {
-    useDataset
-} from "../context/DatasetContext";
+export default function Analytics() {
 
-function Analytics() {
-
-    const { datasetId } =
-        useDataset();
+    const datasetId =
+        localStorage.getItem("dataset_id");
 
     const [
         analytics,
@@ -26,84 +23,67 @@ function Analytics() {
     const [
         error,
         setError
-    ] = useState<string | null>(null);
+    ] = useState("");
+
+    // -----------------------------------
+    // FETCH ANALYTICS
+    // -----------------------------------
 
     useEffect(() => {
 
-        if (!datasetId) return;
+        if (!datasetId) {
+
+            setLoading(false);
+
+            return;
+
+        }
 
         fetchAnalytics();
 
     }, [datasetId]);
 
-    const fetchAnalytics =
-        async () => {
+    const fetchAnalytics = async () => {
 
         try {
 
-            setLoading(true);
+            const response =
+                await fetch(
 
-            setError(null);
-
-            console.log(
-                "Fetching analytics from:",
-                `${API_URL}/analytics/${datasetId}`
-            );
-
-            const response = await fetch(
                     `${API_URL}/analytics/${datasetId}`
+
                 );
-
-            console.log(
-                "Analytics response status:",
-                response.status
-            );
-
-            const text =
-                await response.text();
-
-            console.log(
-                "Raw analytics response:",
-                text
-            );
 
             if (!response.ok) {
 
                 throw new Error(
-                    `Server Error: ${response.status}`
+                    "Failed to fetch analytics"
                 );
 
             }
 
             const data =
-                JSON.parse(text);
-
-            console.log(
-                "Parsed analytics data:",
-                data
-            );
+                await response.json();
 
             setAnalytics(data);
 
-        } catch (error: any) {
+        } catch (err) {
 
-            console.error(
-                "Analytics fetch failed:",
-                error
-            );
+            console.error(err);
 
             setError(
-                error.message ||
-                "Failed to load analytics."
+                "Unable to load analytics."
             );
-
-        } finally {
-
-            setLoading(false);
 
         }
 
+        setLoading(false);
+
     };
+
+    // -----------------------------------
+    // NO DATASET
+    // -----------------------------------
 
     if (!datasetId) {
 
@@ -112,7 +92,9 @@ function Analytics() {
             <div className="page-container">
 
                 <h2>
+
                     Upload a dataset first.
+
                 </h2>
 
             </div>
@@ -120,6 +102,10 @@ function Analytics() {
         );
 
     }
+
+    // -----------------------------------
+    // LOADING
+    // -----------------------------------
 
     if (loading) {
 
@@ -128,7 +114,9 @@ function Analytics() {
             <div className="page-container">
 
                 <h2>
+
                     Loading analytics...
+
                 </h2>
 
             </div>
@@ -136,6 +124,10 @@ function Analytics() {
         );
 
     }
+
+    // -----------------------------------
+    // ERROR
+    // -----------------------------------
 
     if (error) {
 
@@ -144,27 +136,9 @@ function Analytics() {
             <div className="page-container">
 
                 <h2>
-                    Analytics Error
-                </h2>
 
-                <p>
                     {error}
-                </p>
 
-            </div>
-
-        );
-
-    }
-
-    if (!analytics) {
-
-        return (
-
-            <div className="page-container">
-
-                <h2>
-                    No analytics data found.
                 </h2>
 
             </div>
@@ -172,6 +146,10 @@ function Analytics() {
         );
 
     }
+
+    // -----------------------------------
+    // MAIN UI
+    // -----------------------------------
 
     return (
 
@@ -185,7 +163,7 @@ function Analytics() {
 
                 <h1
                     style={{
-                        fontSize: "3rem",
+                        fontSize: "4rem",
                         marginBottom: "1rem"
                     }}
                 >
@@ -196,13 +174,13 @@ function Analytics() {
 
                 <p
                     style={{
-                        opacity: 0.7
+                        opacity: 0.7,
+                        fontSize: "1.2rem"
                     }}
                 >
 
-                    Real-time organizational
-                    intelligence generated
-                    from uploaded survey data.
+                    Real-time organizational intelligence
+                    generated from uploaded survey data.
 
                 </p>
 
@@ -220,6 +198,8 @@ function Analytics() {
 
                 }}
             >
+
+                {/* TOTAL RESPONSES */}
 
                 <div className="card">
 
@@ -244,6 +224,8 @@ function Analytics() {
 
                 </div>
 
+                {/* SURVEY FIELDS */}
+
                 <div className="card">
 
                     <h3
@@ -267,6 +249,8 @@ function Analytics() {
 
                 </div>
 
+                {/* COMPLETION RATE */}
+
                 <div className="card">
 
                     <h3
@@ -289,6 +273,8 @@ function Analytics() {
                     </h1>
 
                 </div>
+
+                {/* ENGAGEMENT SCORE */}
 
                 <div className="card">
 
@@ -318,6 +304,5 @@ function Analytics() {
         </div>
 
     );
-}
 
-export default Analytics;
+}
